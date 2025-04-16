@@ -44,3 +44,5 @@ env/
 # Test coverage
 .coverage
 htmlcov/
+
+user.db
