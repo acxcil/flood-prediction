@@ -4,6 +4,7 @@ import pandas as pd
 from typing import Dict, Tuple, List, Any
 import os
 import logging
+from datetime import datetime
 from api.core.config import settings
 
 logger = logging.getLogger(__name__)
@@ -80,6 +81,13 @@ class ModelLoader:
     def _prepare_features(self, features: Dict[str, Any]) -> np.ndarray:
         """Prepare features for prediction"""
         try:
+            # Check for required fields
+            required_fields = ['elevation_range', 'region', 'basin', 'month']
+            missing_fields = [field for field in required_fields if field not in features]
+            
+            if missing_fields:
+                raise ValueError(f"columns are missing: {set(missing_fields)}")
+            
             # Create a dataframe with the right columns
             df = pd.DataFrame({name: [features.get(name, 0)] for name in self.feature_names})
             
