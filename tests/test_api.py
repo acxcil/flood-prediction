@@ -26,4 +26,5 @@ def test_historical_with_param():
 
 def test_historical_without_param():
     res = client.get("/historical")
-    assert res.status_code == 422  # Missing region query param
+    assert res.status_code == 200
+    assert isinstance(res.json(), list)
