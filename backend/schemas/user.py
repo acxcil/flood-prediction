@@ -9,11 +9,11 @@ class UserOut(BaseModel):
     email: EmailStr
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Token(BaseModel):
     access_token: str
     token_type: str
 
 class TokenData(BaseModel):
-    email: str | None = None
+    email: str  # Required because we're using this in DB lookup

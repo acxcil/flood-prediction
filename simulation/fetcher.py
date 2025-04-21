@@ -18,10 +18,17 @@ def fetch_forecast(api_key, days=3):
     }
 
     all_forecasts = []
+    failed_regions = []
 
     for i, (region, info) in enumerate(REGIONS.items(), start=1):
         print(f"[{i}/{len(REGIONS)}] Fetching forecast for {region}...", end="", flush=True)
-        lat, lon = info['lat'], info['lon']
+        lat, lon = info.get('lat'), info.get('lon')
+
+        if lat is None or lon is None:
+            print(" SKIPPED: Missing lat/lon")
+            failed_regions.append(region)
+            continue
+
         url = (
             f"https://api.openweathermap.org/data/2.5/forecast"
             f"?lat={lat}&lon={lon}"
@@ -33,6 +40,7 @@ def fetch_forecast(api_key, days=3):
             resp.raise_for_status()
         except Exception as e:
             print(f" FAILED: {e}")
+            failed_regions.append(region)
             continue
         else:
             print(" OK")
@@ -40,6 +48,7 @@ def fetch_forecast(api_key, days=3):
         data = resp.json()
         if 'list' not in data:
             print("  → unexpected response format, skipping")
+            failed_regions.append(region)
             continue
 
         df3h = pd.DataFrame(data['list'])
@@ -73,4 +82,14 @@ def fetch_forecast(api_key, days=3):
 
         all_forecasts.append(daily)
 
-    return pd.concat(all_forecasts, ignore_index=True)
+    # Save failures to file for review/retry
+    if failed_regions:
+        os.makedirs("data", exist_ok=True)
+        with open("data/failed_regions.txt", "w") as f:
+            for r in failed_regions:
+                f.write(r + "\n")
+        print(f"❌ Failed regions written to data/failed_regions.txt ({len(failed_regions)} failures)")
+
+    # Return both the successful DataFrame and failed region list
+    df_result = pd.concat(all_forecasts, ignore_index=True) if all_forecasts else pd.DataFrame()
+    return df_result, failed_regions

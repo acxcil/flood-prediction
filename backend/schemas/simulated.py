@@ -8,4 +8,4 @@ class SimulatedOut(BaseModel):
     flood_status: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
