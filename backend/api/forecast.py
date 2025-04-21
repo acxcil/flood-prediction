@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from backend.core.database import get_db
 from backend.schemas.forecast import ForecastIn, ForecastOut
 from backend.db_models.forecast import Forecast
+from backend.schemas.forecast import ForecastUploadRequest
 from datetime import date
 
 router = APIRouter()
@@ -37,3 +38,18 @@ def get_latest_forecast(db: Session = Depends(get_db)):
         ) for f in forecasts
     ]
 
+@router.post("/forecast/upload")
+def upload_forecasts(data: list[ForecastUploadRequest], db: Session = Depends(get_db)):
+    inserted = 0
+    for item in data:
+        forecast = Forecast(
+            region=item.region.lower(),
+            forecast_date=item.forecast_date,
+            prob_hybrid=item.prob_hybrid,
+            alert=item.alert
+        )
+        db.add(forecast)
+        inserted += 1
+
+    db.commit()
+    return {"message": f"✅ Uploaded {inserted} forecasts"}

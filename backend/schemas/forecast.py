@@ -33,3 +33,9 @@ class ForecastResponse(BaseModel):
     region: str
     risk_level: str
     forecast_date: str
+
+class ForecastUploadRequest(BaseModel):
+    region: str
+    forecast_date: date
+    prob_hybrid: float
+    alert: int
