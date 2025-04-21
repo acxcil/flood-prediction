@@ -1,0 +1,19 @@
+# core data + ML
+pandas
+numpy
+scikit-learn
+xgboost
+lightgbm
+shap
+scikit-fuzzy
+networkx
+
+# plotting & notebooks
+matplotlib
+jupyterlab
+nbformat
+
+# utilities
+requests
+joblib
+qw

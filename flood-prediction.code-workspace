@@ -1,0 +1,16 @@
+{
+    "folders": [
+      {
+        "path": "."
+      }
+    ],
+    "settings": {
+      "python.analysis.extraPaths": [
+        "./backend",
+        "./config"
+      ],
+      "python.defaultInterpreterPath": "${workspaceFolder}/venv/Scripts/python.exe",
+      "python.envFile": "${workspaceFolder}/.env"
+    }
+  }
+  

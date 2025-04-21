@@ -1,0 +1,51 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+*.log
+.env
+.env.*
+
+# --- Virtual Environments ---
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+
+# --- Jupyter Notebooks Checkpoints ---
+.ipynb_checkpoints
+
+# --- IDEs & Editors ---
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# --- Data Files ---
+data/raw/
+data/cleaned/*.csv
+*.sqlite3
+*.db
+
+# --- Models ---
+models/*.pkl
+*.h5
+*.pt
+*.joblib
+
+# --- OS Files ---
+.DS_Store
+Thumbs.db
+
+# --- Node (if frontend later) ---
+node_modules/
+dist/
+build/
+
+# --- Pyright / Mypy / VSCode Cache ---
+.pyright/
+.mypy_cache/
