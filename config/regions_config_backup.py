@@ -1,5 +1,9 @@
+"""
+Auto-generated full regions_config with lat/lon
+"""
+
 REGIONS = {
-    "bishkek": {
+    "Bishkek": {
         "elevation_m": 800,
         "slope_deg": 3.5,
         "drainage_density": 2.2,
@@ -13,7 +17,7 @@ REGIONS = {
         "lat": 42.8839461,
         "lon": 74.5803166
     },
-    "osh": {
+    "Osh": {
         "elevation_m": 1000,
         "slope_deg": 8.0,
         "drainage_density": 2.5,
@@ -27,7 +31,7 @@ REGIONS = {
         "lat": 40.5162372,
         "lon": 72.960627
     },
-    "tokmok": {
+    "Tokmok": {
         "elevation_m": 900,
         "slope_deg": 4.0,
         "drainage_density": 2.0,
@@ -41,7 +45,7 @@ REGIONS = {
         "lat": 42.8373462,
         "lon": 75.2953881
     },
-    "alamud\u00fcn": {
+    "Alamud\u00fcn": {
         "elevation_m": 950,
         "slope_deg": 5.0,
         "drainage_density": 1.9,
@@ -55,7 +59,7 @@ REGIONS = {
         "lat": 42.9101461,
         "lon": 74.6366453
     },
-    "ch\u00fcy": {
+    "Ch\u00fcy": {
         "elevation_m": 880,
         "slope_deg": 3.8,
         "drainage_density": 2.1,
@@ -69,7 +73,7 @@ REGIONS = {
         "lat": 42.5550236,
         "lon": 74.621991
     },
-    "jayil": {
+    "Jayil": {
         "elevation_m": 920,
         "slope_deg": 4.5,
         "drainage_density": 1.8,
@@ -83,7 +87,7 @@ REGIONS = {
         "lat": 42.0725902,
         "lon": 74.0969978
     },
-    "kemin": {
+    "Kemin": {
         "elevation_m": 1000,
         "slope_deg": 6.0,
         "drainage_density": 1.7,
@@ -97,7 +101,7 @@ REGIONS = {
         "lat": 42.7882884,
         "lon": 75.697228
     },
-    "moskva": {
+    "Moskva": {
         "elevation_m": 1050,
         "slope_deg": 5.2,
         "drainage_density": 1.6,
@@ -111,7 +115,7 @@ REGIONS = {
         "lat": 42.4927577,
         "lon": 78.4012716
     },
-    "panfilov": {
+    "Panfilov": {
         "elevation_m": 970,
         "slope_deg": 4.8,
         "drainage_density": 1.9,
@@ -125,7 +129,7 @@ REGIONS = {
         "lat": 42.5190545,
         "lon": 74.4152593
     },
-    "sokuluk": {
+    "Sokuluk": {
         "elevation_m": 840,
         "slope_deg": 3.2,
         "drainage_density": 2.3,
@@ -139,7 +143,7 @@ REGIONS = {
         "lat": 42.6649454,
         "lon": 74.2423641
     },
-    "ysyk-ata": {
+    "Ysyk-Ata": {
         "elevation_m": 850,
         "slope_deg": 3.5,
         "drainage_density": 2.2,
@@ -153,7 +157,7 @@ REGIONS = {
         "lat": 42.9504582,
         "lon": 74.9019108
     },
-    "ak-suu": {
+    "Ak-Suu": {
         "elevation_m": 1600,
         "slope_deg": 8.0,
         "drainage_density": 1.4,
@@ -167,7 +171,7 @@ REGIONS = {
         "lat": 42.5001336,
         "lon": 78.5003711
     },
-    "issyk-kul": {
+    "Issyk-Kul": {
         "elevation_m": 1608,
         "slope_deg": 2.5,
         "drainage_density": 1.2,
@@ -181,7 +185,7 @@ REGIONS = {
         "lat": 42.9134978,
         "lon": 77.3881756
     },
-    "jeti-\u00f6g\u00fcz": {
+    "Jeti-\u00d6g\u00fcz": {
         "elevation_m": 2000,
         "slope_deg": 12.0,
         "drainage_density": 1.3,
@@ -195,7 +199,7 @@ REGIONS = {
         "lat": 42.4913569,
         "lon": 78.3840362
     },
-    "tong": {
+    "Tong": {
         "elevation_m": 1750,
         "slope_deg": 7.5,
         "drainage_density": 1.5,
@@ -209,7 +213,7 @@ REGIONS = {
         "lat": 42.1545943,
         "lon": 77.0454449
     },
-    "t\u00fcp": {
+    "T\u00fcp": {
         "elevation_m": 1650,
         "slope_deg": 3.0,
         "drainage_density": 1.1,
@@ -223,7 +227,7 @@ REGIONS = {
         "lat": 42.7289957,
         "lon": 78.3634255
     },
-    "ak-talaa": {
+    "Ak-Talaa": {
         "elevation_m": 2200,
         "slope_deg": 14.0,
         "drainage_density": 1.6,
@@ -237,7 +241,7 @@ REGIONS = {
         "lat": 41.4175335,
         "lon": 75.6629556
     },
-    "at-bashy": {
+    "At-Bashy": {
         "elevation_m": 2300,
         "slope_deg": 15.0,
         "drainage_density": 1.8,
@@ -251,7 +255,7 @@ REGIONS = {
         "lat": 41.1703178,
         "lon": 75.8092334
     },
-    "jumgal": {
+    "Jumgal": {
         "elevation_m": 2100,
         "slope_deg": 10.0,
         "drainage_density": 1.7,
@@ -265,7 +269,7 @@ REGIONS = {
         "lat": 41.9738063,
         "lon": 74.8739748
     },
-    "kochkor": {
+    "Kochkor": {
         "elevation_m": 1900,
         "slope_deg": 9.0,
         "drainage_density": 1.5,
@@ -279,7 +283,7 @@ REGIONS = {
         "lat": 42.2117439,
         "lon": 75.7514736
     },
-    "naryn": {
+    "Naryn": {
         "elevation_m": 2000,
         "slope_deg": 12.0,
         "drainage_density": 1.9,
@@ -293,7 +297,7 @@ REGIONS = {
         "lat": 41.3670658,
         "lon": 75.9931838
     },
-    "bakay-ata": {
+    "Bakay-Ata": {
         "elevation_m": 1050,
         "slope_deg": 6.0,
         "drainage_density": 1.8,
@@ -307,7 +311,7 @@ REGIONS = {
         "lat": 42.4904179,
         "lon": 71.9242329
     },
-    "kara-buura": {
+    "Kara-Buura": {
         "elevation_m": 1150,
         "slope_deg": 7.5,
         "drainage_density": 1.6,
@@ -321,7 +325,7 @@ REGIONS = {
         "lat": 42.6004683,
         "lon": 71.6333532
     },
-    "manas": {
+    "Manas": {
         "elevation_m": 1100,
         "slope_deg": 5.5,
         "drainage_density": 1.7,
@@ -335,7 +339,7 @@ REGIONS = {
         "lat": 42.9988158,
         "lon": 74.4378095
     },
-    "talas": {
+    "Talas": {
         "elevation_m": 1000,
         "slope_deg": 6.5,
         "drainage_density": 1.9,
@@ -349,7 +353,7 @@ REGIONS = {
         "lat": 42.4406777,
         "lon": 72.1408556
     },
-    "batken": {
+    "Batken": {
         "elevation_m": 900,
         "slope_deg": 10.0,
         "drainage_density": 1.5,
@@ -363,7 +367,7 @@ REGIONS = {
         "lat": 39.8661192,
         "lon": 71.5761465
     },
-    "kadamjay": {
+    "Kadamjay": {
         "elevation_m": 980,
         "slope_deg": 12.0,
         "drainage_density": 1.4,
@@ -377,7 +381,7 @@ REGIONS = {
         "lat": 40.1300143,
         "lon": 71.726265
     },
-    "isfana": {
+    "Isfana": {
         "elevation_m": 1200,
         "slope_deg": 14.0,
         "drainage_density": 1.6,
@@ -391,7 +395,7 @@ REGIONS = {
         "lat": 39.8384418,
         "lon": 69.5253831
     },
-    "aksy": {
+    "Aksy": {
         "elevation_m": 1100,
         "slope_deg": 15.0,
         "drainage_density": 1.7,
@@ -405,7 +409,7 @@ REGIONS = {
         "lat": 41.5645467,
         "lon": 72.0334992
     },
-    "ala-buka": {
+    "Ala-Buka": {
         "elevation_m": 1050,
         "slope_deg": 10.0,
         "drainage_density": 1.8,
@@ -419,7 +423,7 @@ REGIONS = {
         "lat": 41.2561757,
         "lon": 74.5329597
     },
-    "bazar-korgon": {
+    "Bazar-Korgon": {
         "elevation_m": 950,
         "slope_deg": 8.0,
         "drainage_density": 1.9,
@@ -433,7 +437,7 @@ REGIONS = {
         "lat": 41.033588,
         "lon": 72.7421097
     },
-    "chatkal": {
+    "Chatkal": {
         "elevation_m": 1400,
         "slope_deg": 18.0,
         "drainage_density": 1.5,
@@ -447,7 +451,7 @@ REGIONS = {
         "lat": 41.7280423,
         "lon": 70.9206663
     },
-    "jalal-abad": {
+    "Jalal-Abad": {
         "elevation_m": 950,
         "slope_deg": 9.0,
         "drainage_density": 1.8,
@@ -461,7 +465,7 @@ REGIONS = {
         "lat": 40.9970172,
         "lon": 73.0132857
     },
-    "kanysh-kyya": {
+    "Kanysh-Kyya": {
         "elevation_m": 1300,
         "slope_deg": 12.0,
         "drainage_density": 1.6,
@@ -475,7 +479,7 @@ REGIONS = {
         "lat": 41.7653609,
         "lon": 71.0686378
     },
-    "masy": {
+    "Masy": {
         "elevation_m": 900,
         "slope_deg": 8.5,
         "drainage_density": 1.9,
@@ -489,7 +493,7 @@ REGIONS = {
         "lat": None,
         "lon": None
     },
-    "suzak": {
+    "Suzak": {
         "elevation_m": 920,
         "slope_deg": 7.5,
         "drainage_density": 1.7,
@@ -503,7 +507,7 @@ REGIONS = {
         "lat": 40.896861,
         "lon": 72.9119207
     },
-    "toktogul": {
+    "Toktogul": {
         "elevation_m": 1000,
         "slope_deg": 11.0,
         "drainage_density": 1.5,
@@ -517,7 +521,7 @@ REGIONS = {
         "lat": 41.8734702,
         "lon": 72.9451052
     },
-    "aravan": {
+    "Aravan": {
         "elevation_m": 950,
         "slope_deg": 9.0,
         "drainage_density": 2.0,
@@ -531,7 +535,7 @@ REGIONS = {
         "lat": 40.5138159,
         "lon": 72.4988777
     },
-    "daroot-korgon": {
+    "Daroot-Korgon": {
         "elevation_m": 2800,
         "slope_deg": 18.0,
         "drainage_density": 1.3,
@@ -545,7 +549,7 @@ REGIONS = {
         "lat": 39.5510148,
         "lon": 72.2156061
     },
-    "g\u00fclch\u00f6": {
+    "G\u00fclch\u00f6": {
         "elevation_m": 1450,
         "slope_deg": 14.0,
         "drainage_density": 1.7,
@@ -559,7 +563,7 @@ REGIONS = {
         "lat": 40.3135711,
         "lon": 73.4465512
     },
-    "kara-kulja": {
+    "Kara-Kulja": {
         "elevation_m": 1300,
         "slope_deg": 12.0,
         "drainage_density": 1.8,
@@ -573,7 +577,7 @@ REGIONS = {
         "lat": 40.6313037,
         "lon": 73.5894935
     },
-    "kara-suu": {
+    "Kara-Suu": {
         "elevation_m": 1000,
         "slope_deg": 9.0,
         "drainage_density": 2.1,
@@ -587,7 +591,7 @@ REGIONS = {
         "lat": 40.7079547,
         "lon": 72.8801867
     },
-    "nookat": {
+    "Nookat": {
         "elevation_m": 1000,
         "slope_deg": 8.0,
         "drainage_density": 2.0,
@@ -601,7 +605,7 @@ REGIONS = {
         "lat": 40.2657382,
         "lon": 72.6178387
     },
-    "\u00f6zg\u00f6n": {
+    "\u00d6zg\u00f6n": {
         "elevation_m": 890,
         "slope_deg": 7.0,
         "drainage_density": 2.2,

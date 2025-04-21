@@ -36,3 +36,4 @@ def get_latest_forecast(db: Session = Depends(get_db)):
             risk_level=risk_level(f.prob_hybrid)
         ) for f in forecasts
     ]
+

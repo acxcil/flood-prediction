@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from backend.core.database import get_db
 from backend.db_models.forecast import Forecast
+from config.regions_config import REGIONS
 
 router = APIRouter()
 
@@ -11,6 +12,7 @@ def latest_status(db: Session = Depends(get_db)):
     latest = db.query(Forecast.forecast_date).order_by(Forecast.forecast_date.desc()).first()
     if not latest:
         raise HTTPException(status_code=404, detail="No forecast data")
+
     records = db.query(Forecast).filter(Forecast.forecast_date == latest[0]).all()
 
     def label(score):
@@ -21,7 +23,13 @@ def latest_status(db: Session = Depends(get_db)):
         return "Low"
 
     return [
-        {"region": f.region, "risk_score": f.prob_hybrid, "alert_level": label(f.prob_hybrid)}
+        {
+            "region": f.region,
+            "risk_score": f.prob_hybrid,
+            "alert_level": label(f.prob_hybrid),
+            "lat": REGIONS.get(f.region, {}).get("lat"),
+            "lon": REGIONS.get(f.region, {}).get("lon")
+        }
         for f in records
     ]
 
@@ -30,6 +38,7 @@ def risk_summary(db: Session = Depends(get_db)):
     latest = db.query(Forecast.forecast_date).order_by(Forecast.forecast_date.desc()).first()
     if not latest:
         raise HTTPException(status_code=404, detail="No forecast data")
+
     records = db.query(Forecast).filter(Forecast.forecast_date == latest[0]).all()
 
     summary = {"Low": 0, "Moderate": 0, "High": 0}
@@ -43,15 +52,22 @@ def risk_summary(db: Session = Depends(get_db)):
     return summary
 
 @router.get("/historical")
-def historical_forecasts(region: str = Query(...), days: int = 30, db: Session = Depends(get_db)):
+def historical_forecasts(region: str, days: int = 30, db: Session = Depends(get_db)):
     cutoff = datetime.utcnow().date() - timedelta(days=days)
     results = (
         db.query(Forecast)
-        .filter(Forecast.region == region, Forecast.forecast_date >= cutoff)
+        .filter(Forecast.region == region.lower())  # normalize input
+        .filter(Forecast.forecast_date >= cutoff)
         .order_by(Forecast.forecast_date)
         .all()
     )
     return [
-        {"date": str(f.forecast_date), "risk_score": f.prob_hybrid, "alert": f.alert}
+        {
+            "date": str(f.forecast_date),
+            "risk_score": f.prob_hybrid,
+            "alert": f.alert,
+            "lat": REGIONS.get(f.region, {}).get("lat"),
+            "lon": REGIONS.get(f.region, {}).get("lon")
+        }
         for f in results
     ]
