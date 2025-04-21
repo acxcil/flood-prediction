@@ -52,17 +52,23 @@ def risk_summary(db: Session = Depends(get_db)):
     return summary
 
 @router.get("/historical")
-def historical_forecasts(region: str, days: int = 30, db: Session = Depends(get_db)):
+def historical_forecasts(
+    region: str = Query(None),
+    days: int = 30,
+    db: Session = Depends(get_db)
+):
     cutoff = datetime.utcnow().date() - timedelta(days=days)
-    results = (
-        db.query(Forecast)
-        .filter(Forecast.region == region.lower())  # normalize input
-        .filter(Forecast.forecast_date >= cutoff)
-        .order_by(Forecast.forecast_date)
-        .all()
-    )
+    
+    query = db.query(Forecast).filter(Forecast.forecast_date >= cutoff)
+
+    if region:
+        query = query.filter(Forecast.region == region.lower())
+
+    results = query.order_by(Forecast.forecast_date).all()
+
     return [
         {
+            "region": f.region,
             "date": str(f.forecast_date),
             "risk_score": f.prob_hybrid,
             "alert": f.alert,
