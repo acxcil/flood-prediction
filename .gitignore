@@ -49,6 +49,3 @@ build/
 # --- Pyright / Mypy / VSCode Cache ---
 .pyright/
 .mypy_cache/
-
-
-flood-prediction.code-workspace
