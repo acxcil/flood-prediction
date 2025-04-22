@@ -20,10 +20,20 @@ class ForecastOut(BaseModel):
         from_attributes = True
 
 class PredictionRequest(BaseModel):
-    precipitation: float
-    river_level: float
-    temperature: float
-    soil_moisture: float
+    Precipitation: float
+    Elevation_m: float
+    Slope_deg: float
+    Drainage_Density: float
+    Dist_to_River_km: float
+    Soil_Type: str
+    Land_Cover: str
+    TWI: float
+    NDVI: float
+    month_sin: float
+    month_cos: float
+    Precipitation_norm: float
+    River_Level_norm: float
+    Fuzzy_Risk: float
 
 class PredictionResponse(BaseModel):
     risk_score: float
