@@ -1,4 +1,3 @@
-```markdown
 # Flood Prediction & Early-Warning System
 
 A machine-learning–driven pipeline for near-real-time flood forecasting in mountainous basins, tailored to Kyrgyzstan’s data streams and operational constraints. This repository implements end-to-end components—from automated data ingestion through feature engineering, fuzzy-logic risk indexing, hybrid ensemble modeling, to a REST API and scheduled jobs—packaged in Docker for consistent deployment.
