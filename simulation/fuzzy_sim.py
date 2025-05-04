@@ -39,3 +39,23 @@ def load_fuzzy_sim():
 
     system = ctrl.ControlSystem(rules)
     return ctrl.ControlSystemSimulation(system)
+
+# import matplotlib.pyplot as plt
+# import numpy as np
+# import skfuzzy as fuzz
+
+# x = np.linspace(0, 1, 100)
+# low = fuzz.trimf(x, [0, 0, 0.4])
+# moderate = fuzz.trimf(x, [0.2, 0.5, 0.8])
+# high = fuzz.trimf(x, [0.6, 1, 1])
+
+# plt.figure(figsize=(8,5))
+# plt.plot(x, low, label='Low')
+# plt.plot(x, moderate, label='Moderate')
+# plt.plot(x, high, label='High')
+# plt.title('Precipitation Membership Functions')
+# plt.xlabel('Normalized Precipitation')
+# plt.ylabel('Membership Degree')
+# plt.legend()
+# plt.grid()
+# plt.show()

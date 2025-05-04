@@ -52,3 +52,12 @@ build/
 
 
 training/choosing-model.ipynb
+
+
+frontend/node_modules
+frontend/.next
+frontend/.env.local
+
+
+notebooks/other_things.ipynb
+notebooks/diagraphs_for_report.ipynb
