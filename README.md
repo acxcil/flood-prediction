@@ -1,151 +1,276 @@
-# Flood Prediction & Early-Warning System
+```markdown
+# ML-Driven Flood Prediction and Early Warning Dashboard
 
-A machine-learning–driven pipeline for near-real-time flood forecasting in mountainous basins, tailored to Kyrgyzstan’s data streams and operational constraints. This repository implements end-to-end components—from automated data ingestion through feature engineering, fuzzy-logic risk indexing, hybrid ensemble modeling, to a REST API and scheduled jobs—packaged in Docker for consistent deployment. **All input time series in this demo are generated or simulated**, enabling offline experimentation with the full pipeline.
-
----
-
-## 🚀 Features
-
-- **Automated Ingestion & Preprocessing**  
-  – Pulls (or simulates) hourly rainfall and river-stage data, resamples to 3 h steps, fills short gaps, detects outliers.  
-- **Synthetic Data Simulation**  
-  – `simulation/` contains scripts & sample configs to generate realistic hydrometeorological datasets for demo and testing.  
-- **Feature Engineering**  
-  – Computes rolling sums, NDVI, terrain metrics (slope, distance to stream), seasonal encodings, land-cover one-hots.  
-- **Fuzzy Risk Index**  
-  – Mamdani fuzzy logic combines precipitation, stage, and NDVI into a continuous `fuzzy_risk` feature.  
-- **Hybrid Ensemble Model**  
-  – Stacked RandomForest + LightGBM with Ridge meta-learner, calibrated for well-behaved flood-probabilities.  
-- **Model Explainability**  
-  – SHAP values identify top drivers of flood risk (e.g. monsoon seasonality, fuzzy index).  
-- **REST API**  
-  – `POST /predict` returns per-station flood-risk probabilities for a given timestamp.  
-- **Job Scheduler**  
-  – APScheduler “cron” jobs to re-ingest data daily and re-forecast every 3 h.  
-- **Containerized Deployment**  
-  – Dockerfile + Uvicorn+Gunicorn for reproducible environments.  
+A full-stack flood risk forecasting system for Kyrgyzstan, combining hybrid fuzzy logic & LightGBM machine learning with a clean, modern React frontend dashboard.
 
 ---
 
-## 📂 Repository Layout
+## 📖 Table of Contents
+
+- [Project Overview](#project-overview)  
+- [Architecture](#architecture)  
+- [Features](#features)  
+- [Prerequisites](#prerequisites)  
+- [Getting Started](#getting-started)  
+  - [Backend Setup](#backend-setup)  
+  - [Simulation (Forecast Job)](#simulation-forecast-job)  
+  - [Frontend Setup](#frontend-setup)  
+- [Usage](#usage)  
+  - [Running the API Server](#running-the-api-server)  
+  - [Running the Frontend](#running-the-frontend)  
+  - [Manual Forecast Job](#manual-forecast-job)  
+- [API Reference](#api-reference)  
+- [Directory Structure](#directory-structure)  
+- [Clearing / Resetting the Database](#clearing--resetting-the-database)  
+- [Contributing](#contributing)  
+- [License](#license)  
+
+---
+
+## 📝 Project Overview
+
+This system forecasts regional flood risk in Kyrgyzstan by:
+
+1. Fetching daily weather data from OpenWeatherMap  
+2. Computing 12 hydrometeorological features + fuzzy logic  
+3. Passing through a calibrated LightGBM classifier  
+4. Storing risk scores & alert levels (`Low` / `Moderate` / `High`) in PostgreSQL  
+5. Exposing a FastAPI backend and a React/Next.js frontend dashboard  
+
+---
+
+## 🏗️ Architecture
 
 ```
-.
-├── backend/                # API layer, FastAPI application    
-├── config/                 # configuration templates (e.g. config.yaml)  
-├── data/                   # raw & processed sample data (not checked in)  
-├── notebooks/              # EDA & prototyping  
-├── preprocessing/          # ingestion & feature-engineering scripts  
-├── scripts/                # utility scripts  
-├── simulation/             # synthetic data generators & configs  
-├── training/               # model training & hyperparameter search  
-├── tests/                  # pytest suites for ingestion, API, forecasting  
-├── run_tests.py            # wrapper to invoke all test suites  
-├── requirements.txt        # Python dependencies  
-└── Dockerfile              # container build instructions  
-```
+
+┌──────────────┐      ┌─────────────────┐      ┌──────────────┐
+│ OpenWeather  ├─────▶│ simulation/     ├─────▶│ backend/     │
+│ API          │      │ forecast\_job.py │      │ FastAPI      │
+└──────────────┘      └─────────────────┘      └─────┬────────┘
+│
+▼
+PostgreSQL
+│
+▼
+┌─────────────────┐
+│ frontend/       │
+│ Next.js +       │
+│ Tailwind CSS    │
+└─────────────────┘
+
+````
 
 ---
 
-## ⚙️ Installation
+## ⭐ Features
 
-1. **Clone the repo**  
+- **Regional Forecasts**: Latest & historical flood risk for 43+ regions  
+- **Hybrid Fuzzy + ML Pipeline**: 12 features → fuzzy logic → LightGBM → calibrated threshold  
+- **User Alerts**: Email subscription per region (JWT-secured)  
+- **Admin Tools**: Trigger ingest/forecast, cleanup old data  
+- **Dark/Light Mode** with Tailwind CSS theming  
+- **Interactive Charts**: Risk distribution, historical trends, high-risk map  
+
+---
+
+## 🔧 Prerequisites
+
+- **Python 3.9+**  
+- **Node.js 16+ & npm**  
+- **PostgreSQL 13+**  
+- (Optional) Windows Task Scheduler or cron for daily automation  
+
+---
+
+## 🚀 Getting Started
+
+### Backend Setup
+
+1. **Clone & enter project root**  
    ```bash
    git clone https://github.com/acxcil/flood-prediction.git
    cd flood-prediction
-   ```
+````
 
-2. **Create & activate a virtual environment**  
+2. **Create & activate a virtualenv**
+
    ```bash
-   python3 -m venv venv
-   source venv/bin/activate     # macOS/Linux
-   venv\Scripts\activate.bat    # Windows
+   cd backend
+   python -m venv venv
+   # Windows
+   venv\Scripts\activate
+   # macOS / Linux
+   source venv/bin/activate
    ```
 
-3. **Install dependencies**  
+3. **Install Python dependencies**
+
    ```bash
    pip install --upgrade pip
    pip install -r requirements.txt
    ```
 
-4. **Copy & customize configuration**  
-   ```bash
-   cp config/config.sample.yaml config/config.yaml
+4. **Configure environment variables**
+   Copy `.env.example` → `.env` and fill in:
+
+   ```ini
+   DATABASE_URL=postgresql://<user>:<pass>@localhost:5432/flood_prediction_db
+   OWM_API_KEY=<your_openweathermap_api_key>
+   JWT_SECRET=<some_random_secret>
    ```
-   Populate `config.yaml` with your API keys, database URI, forecast grid, scheduler timings, or simulation parameters.
+
+5. **Initialize database**
+
+   ```bash
+   # Create the DB and run migrations (if any)
+   psql -U <user> -c "CREATE DATABASE flood_prediction_db;"
+   # Or use your preferred GUI/migrations
+   ```
 
 ---
 
-## 💻 Usage
+### Simulation (Forecast Job)
 
-### 1. (Optional) Generate Synthetic Data
+The `simulation/forecast_job.py` script:
+
+* **Fetches** new weather forecasts for any missing dates
+* **Runs** the hybrid fuzzy+ML pipeline
+* **Uploads** results to `POST /forecast/upload`
+
+To catch up on missed days:
+
 ```bash
-python simulation/generate_data.py --config config/config.yaml
-```
-This populates `data/raw/` with simulated rain/stage time-series for testing.
-
-### 2. Data Ingestion & Feature Engineering
-```bash
-python preprocessing/preprocess.py --config config/config.yaml
-```
-
-### 3. Train or Update Model
-```bash
-python training/hybrid_model.py --config config/config.yaml
-```
-
-### 4. Run Scheduled Jobs (Blocking)
-```bash
-python scripts/forecast_job.py --config config/config.yaml
-```
-
-### 5. Start the Prediction API
-```bash
-uvicorn backend.api:app --host 0.0.0.0 --port 8000
-# or via Gunicorn for production:
-gunicorn backend.api:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:80
-```
-
-### 6. Query the API
-```bash
-curl -X POST "http://localhost:8000/predict" \
-     -H "Content-Type: application/json" \
-     -d '{"station_id": 123, "timestamp": "2025-07-15T06:00:00Z"}'
-```
-
-Response:
-```json
-{
-  "station_id": 123,
-  "risk": 0.78
-}
+cd ../simulation
+python forecast_job.py --backfill-days 14
 ```
 
 ---
 
-## ✅ Testing
+### Frontend Setup
 
-Run the full test suite with:
-```bash
-pytest --maxfail=1 -q
-# or via:
-python run_tests.py
-```
+1. **Install dependencies**
 
-Tests cover data ingestion, feature engineering sanity checks, fuzzy‐logic outputs, model inference, and API endpoint correctness.
+   ```bash
+   cd ../frontend
+   npm install
+   ```
+
+2. **(Optional) Add Tailwind-watch**
+   Tailwind is already configured; no further steps needed.
 
 ---
 
-## 🐳 Docker Deployment
+## 🏃 Usage
 
-Build the image:
+### Running the API Server
+
+From `backend/`:
+
 ```bash
-docker build -t flood-predictor:latest .
+uvicorn main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Run the container:
+### Running the Frontend
+
+From `frontend/`:
+
 ```bash
-docker run -e CONFIG_PATH=/app/config/config.yaml \
-           -p 8000:80 \
-           flood-predictor:latest
+npm run dev
+```
+
+Visit `http://localhost:3000`.
+
+### Manual Forecast Job
+
+```bash
+cd simulation
+python forecast_job.py           # only fetches missing dates
+python forecast_job.py --backfill-days 7
+```
+
+---
+
+## 📚 API Reference
+
+### Public
+
+* `GET /regions`
+* `GET /forecast/latest`
+* `GET /forecast/{region}?days=N`
+* `GET /forecast/{region}?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD`
+
+### Auth
+
+* `POST /users/` → register `{ email, password }`
+* `POST /auth/login` → form-urlencoded `username` & `password`
+* `GET /auth/me` → profile (requires `Authorization: Bearer <token>`)
+
+### Subscriptions (JWT required)
+
+* `GET /user/subscriptions`
+* `POST /user/subscriptions` `{ region }`
+* `DELETE /user/subscriptions/{id}`
+
+### Admin (JWT, `is_admin` only)
+
+* `POST /admin/ingest`
+* `DELETE /admin/cleanup?days=N`
+* `GET /admin/ping`
+
+---
+
+## 📂 Directory Structure
+
+```
+flood-prediction/
+├── backend/
+│   ├── main.py
+│   ├── models/
+│   ├── api/…
+│   └── requirements.txt
+├── simulation/
+│   └── forecast_job.py
+├── frontend/
+│   ├── pages/
+│   ├── components/
+│   ├── styles/
+│   ├── tailwind.config.js
+│   └── package.json
+├── .env
+└── README.md
+```
+
+---
+
+## 🧹 Clearing / Resetting the Database
+
+To remove all users & subscriptions (via psql CLI):
+
+```sql
+-- First drop subscriptions (or use CASCADE)
+DELETE FROM subscriptions;
+DELETE FROM users;
+```
+
+Or:
+
+```sql
+TRUNCATE TABLE subscriptions, users RESTART IDENTITY CASCADE;
+```
+
+---
+
+## 🤝 Contributing
+
+1. Fork & clone
+2. Create a feature branch
+3. Submit PR & ensure CI passes
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+```
 ```

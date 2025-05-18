@@ -1,15 +1,10 @@
-export default function ChartCard({ title, children, className = '' }) {
+export default function ChartCard({ title, children }) {
   return (
-    <div
-      className={
-        `bg-white dark:bg-gray-800 shadow rounded-lg p-4 ` +
-        className
-      }
-    >
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
       {title && (
-        <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
+        <h2 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-200">
           {title}
-        </h3>
+        </h2>
       )}
       {children}
     </div>
