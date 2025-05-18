@@ -86,17 +86,17 @@ This populates `data/raw/` with simulated rain/stage time-series for testing.
 
 ### 2. Data Ingestion & Feature Engineering
 ```bash
-python preprocessing/ingest_and_engineer.py --config config/config.yaml
+python preprocessing/preprocess.py --config config/config.yaml
 ```
 
 ### 3. Train or Update Model
 ```bash
-python training/train_model.py --config config/config.yaml
+python training/hybrid_model.py --config config/config.yaml
 ```
 
 ### 4. Run Scheduled Jobs (Blocking)
 ```bash
-python scripts/scheduler_job.py --config config/config.yaml
+python scripts/forecast_job.py --config config/config.yaml
 ```
 
 ### 5. Start the Prediction API
