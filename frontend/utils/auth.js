@@ -1,25 +1,17 @@
-import jwt_decode from 'jwt-decode';
-
-// Safely access localStorage only in browser
+// utils/auth.js
 export const setToken = (t) => {
   if (typeof window !== 'undefined') {
-    localStorage.setItem('token', t);
+    localStorage.setItem('token', t)
   }
-};
+}
 
 export const getToken = () => {
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem('token');
-  }
-  return null;
-};
+  if (typeof window === 'undefined') return null
+  return localStorage.getItem('token')
+}
 
-export const getUser = () => {
-  const t = getToken();
-  if (!t) return null;
-  try {
-    return jwt_decode(t);
-  } catch {
-    return null;
+export const clearToken = () => {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('token')
   }
-};
+}

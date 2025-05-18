@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* zebra stripes for <table class="table-zebra"> */
+.table-zebra tbody tr:nth-child(odd) {
+  @apply bg-gray-50 dark:bg-gray-700;
+}
+.table-zebra tbody tr:hover {
+  @apply bg-gray-100 dark:bg-gray-600;
+}

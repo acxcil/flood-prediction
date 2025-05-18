@@ -1,40 +1,34 @@
 // pages/historical.js
-import { useState, useEffect } from 'react';
-import { useQuery } from 'react-query';
-import api from '../components/api';
-import ChartCard from '../components/ChartCard';
-import Chart from '../components/Chart';
+import { useState, useEffect } from 'react'
+import { useQuery } from 'react-query'
+import { CSVLink } from 'react-csv'
+import api from '../components/api'
+import ChartCard from '../components/ChartCard'
+import Chart from '../components/Chart'
 
 export default function Historical() {
-  // 1) Fetch all regions
-  const {
-    data: regions = [],
-    isLoading: regLoading,
-    error: regError,
-  } = useQuery('regions', api.getRegions);
+  const { data: regions = [], isLoading: regLoading } = useQuery(
+    'regions',
+    api.getRegions
+  )
 
-  // 2) Local state for the selected region ID (route param) and its display name
-  const [regionId, setRegionId]     = useState('');
-  const [regionName, setRegionName] = useState('');
+  const today = new Date().toISOString().slice(0,10)
+  const [regionId, setRegionId]     = useState('')
+  const [regionName, setRegionName] = useState('')
+  const [startDate, setStartDate]   = useState('')
+  const [endDate, setEndDate]       = useState(today)
 
-  // 3) Date pickers (use your existing min/max logic or the 30-day default)
-  const today      = new Date().toISOString().split('T')[0];
-  const defaultAgo = new Date(Date.now() - 29*24*60*60*1000)
-    .toISOString()
-    .split('T')[0];
-
-  const [startDate, setStartDate] = useState(defaultAgo);
-  const [endDate,   setEndDate]   = useState(today);
-
-  // 4) When regions load, default to the first one
+  // on load, default to first region + 30-day window
   useEffect(() => {
     if (regions.length && !regionId) {
-      setRegionId(regions[0].id);
-      setRegionName(regions[0].name);
+      setRegionId(regions[0].id)
+      setRegionName(regions[0].name)
+      const d = new Date()
+      d.setDate(d.getDate() - 29)
+      setStartDate(d.toISOString().slice(0,10))
     }
-  }, [regions, regionId]);
+  }, [regions, regionId])
 
-  // 5) Fetch history for the chosen ID & range
   const {
     data: history = [],
     isLoading: histLoading,
@@ -43,79 +37,90 @@ export default function Historical() {
     ['history', regionId, startDate, endDate],
     () => api.getHistoryByRange(regionId, startDate, endDate),
     { enabled: Boolean(regionId && startDate && endDate) }
-  );
+  )
 
-  if (regLoading) return <p>Loading regions…</p>;
-  if (regError)   return <p>Error loading regions</p>;
+  if (regLoading) return <p>Loading regions…</p>
+  if (histError) return <p className="text-red-500">Error loading data.</p>
+
+  // presets for “week / month / year / all”
+  const presets = [
+    { label: 'Week',  days: 7   },
+    { label: 'Month', days: 30  },
+    { label: 'Year',  days: 365 },
+    { label: 'All',   days: null },
+  ]
 
   return (
-    <div>
-      <h1 className="text-2xl font-semibold mb-2">Historical Flood Data</h1>
-      <p className="text-gray-600 mb-4">
-        Showing model risk vs. actual status for <strong>{regionName}</strong>.
+    <div className="space-y-4">
+      <h1 className="text-2xl font-semibold">Historical Flood Data</h1>
+      <p className="text-gray-600">
+        Showing risk for <strong>{regionName}</strong>.
       </p>
 
-      {/* Controls */}
-      <div className="mb-6 flex flex-wrap gap-4 items-end">
-        {/* Region selector */}
+      {/* controls */}
+      <div className="flex flex-wrap gap-4 items-end">
         <div>
-          <label htmlFor="region" className="block font-medium">Region:</label>
+          <label className="block font-medium">Region:</label>
           <select
-            id="region"
-            className="mt-1 p-2 border rounded"
+            className="mt-1 p-2 border rounded bg-white dark:bg-gray-800"
             value={regionId}
-            onChange={(e) => {
-              const sel = regions.find(r => r.id === e.target.value);
-              setRegionId(e.target.value);
-              setRegionName(sel?.name || e.target.value);
+            onChange={e => {
+              const sel = regions.find(r => r.id === e.target.value)
+              setRegionId(e.target.value)
+              setRegionName(sel?.name || '')
             }}
           >
-            {regions.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.name}
-              </option>
+            {regions.map(r => (
+              <option key={r.id} value={r.id}>{r.name}</option>
             ))}
           </select>
         </div>
 
-        {/* Start date */}
-        <div>
-          <label htmlFor="startDate" className="block font-medium">From:</label>
-          <input
-            id="startDate"
-            type="date"
-            className="mt-1 p-2 border rounded"
-            value={startDate}
-            max={endDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
+        <div className="flex gap-2">
+          {presets.map(p => (
+            <button
+              key={p.label}
+              onClick={() => {
+                const end = new Date().toISOString().slice(0,10)
+                let start
+                if (p.days === null) {
+                  start = history[0]?.forecast_date || end
+                } else {
+                  const d = new Date()
+                  d.setDate(d.getDate() - p.days)
+                  start = d.toISOString().slice(0,10)
+                }
+                setStartDate(start)
+                setEndDate(end)
+              }}
+              className="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded"
+            >
+              Last {p.label}
+            </button>
+          ))}
         </div>
 
-        {/* End date */}
-        <div>
-          <label htmlFor="endDate" className="block font-medium">To:</label>
-          <input
-            id="endDate"
-            type="date"
-            className="mt-1 p-2 border rounded"
-            value={endDate}
-            min={startDate}
-            max={today}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-        </div>
+        <CSVLink
+          data={history}
+          filename={`${regionName}-${startDate}-to-${endDate}.csv`}
+          className="px-4 py-2 bg-blue-600 text-white rounded"
+        >
+          Download CSV
+        </CSVLink>
       </div>
 
-      {/* Chart */}
+      {/* chart or no-data message */}
       {histLoading ? (
-        <p>Loading historical data…</p>
-      ) : histError ? (
-        <p>Error loading data for {regionName}</p>
+        <p>Loading data…</p>
+      ) : history.length === 0 ? (
+        <p className="text-center text-gray-500">
+          No data available for {regionName} between {startDate} and {endDate}.
+        </p>
       ) : (
         <ChartCard title={`Risk & Actual Status — ${regionName}`}>
           <Chart data={history} />
         </ChartCard>
       )}
     </div>
-  );
+  )
 }

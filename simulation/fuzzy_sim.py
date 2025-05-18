@@ -31,9 +31,9 @@ def load_fuzzy_sim():
         ctrl.Rule(precip['low'] & runoff['high'], risk['moderate']),
         ctrl.Rule(precip['moderate'] & runoff['low'], risk['moderate']),
         ctrl.Rule(precip['moderate'] & runoff['moderate'], risk['moderate']),
-        ctrl.Rule(precip['moderate'] & runoff['high'], risk['high']),
+        ctrl.Rule(precip['moderate'] & runoff['high'], risk['moderate']),
         ctrl.Rule(precip['high'] & runoff['low'], risk['moderate']),
-        ctrl.Rule(precip['high'] & runoff['moderate'], risk['high']),
+        ctrl.Rule(precip['high'] & runoff['moderate'], risk['moderate']),
         ctrl.Rule(precip['high'] & runoff['high'], risk['high']),
     ]
 

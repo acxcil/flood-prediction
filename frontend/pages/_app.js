@@ -1,24 +1,19 @@
-import '../styles/globals.css';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import Layout from '../components/Layout';
-import ProtectedRoute from '../components/ProtectedRoute';
+// pages/_app.js
+import '../styles/globals.css'
+import { ThemeProvider } from 'next-themes'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import Layout from '../components/Layout'
 
-const queryClient = new QueryClient();
-const protectedRoutes = ['/subscriptions', '/admin'];
+const queryClient = new QueryClient()
 
-export default function MyApp({ Component, pageProps, router }) {
-  const isProtected = protectedRoutes.includes(router.pathname);
+export default function MyApp({ Component, pageProps }) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Layout>
-        {isProtected ? (
-          <ProtectedRoute>
-            <Component {...pageProps} />
-          </ProtectedRoute>
-        ) : (
+    <ThemeProvider attribute="class" defaultTheme="light">
+      <QueryClientProvider client={queryClient}>
+        <Layout>
           <Component {...pageProps} />
-        )}
-      </Layout>
-    </QueryClientProvider>
-  );
+        </Layout>
+      </QueryClientProvider>
+    </ThemeProvider>
+  )
 }

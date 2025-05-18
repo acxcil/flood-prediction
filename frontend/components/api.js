@@ -61,13 +61,12 @@ const api = {
   // ─── Authentication ─────────────────────────────────────────────────────────
   /**
    * POST /auth/login
-   * @param {string} username
-   * @param {string} password
-   * @returns {Promise<string>} access_token
+   * Expects JSON { email, password }
+   * Returns the access token
    */
-  login: (username, password) =>
+  login: (email, password) =>
     axios
-      .post(`${BASE}/auth/login`, { username, password })
+      .post(`${BASE}/auth/login`, { email, password })
       .then(res => res.data.access_token),
 
   /**
@@ -161,6 +160,27 @@ const api = {
    */
   predict: features =>
     axios.post(`${BASE}/predict`, features).then(res => res.data),
+
+  /**
+   * GET /forecast/{region}?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD
+   * Returns [] if no records found in that window.
+   */
+  getHistoryByRange: (region, start_date, end_date) =>
+    axios
+      .get(`${BASE}/forecast/${region}`, {
+        params: { start_date, end_date },
+      })
+      .then((r) => r.data)
+      .catch((err) => {
+        if (err.response?.status === 404) {
+          return [];
+        }
+        throw err;
+      }),
+
+
+
+
 };
 
 export default api;

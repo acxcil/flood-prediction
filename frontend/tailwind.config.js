@@ -1,8 +1,17 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./pages/**/*.{js,jsx}", "./components/**/*.{js,jsx}"],
   darkMode: 'class',
+  content: [
+    './pages/**/*.{js,jsx}',
+    './components/**/*.{js,jsx}',
+  ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        // makes `bg-water-light` refer to our wave.svg
+        'water-light': "url('/wave.svg')",
+      },
+    },
   },
   plugins: [],
-};
+}
